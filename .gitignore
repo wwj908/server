@@ -1,0 +1,15 @@
+node_modules/
+__pycache__/
+*.py[cod]
+.server-job-id
+.env
+.env.*
+*.log
+logs/
+downloads/
+download/
+uploads/
+tmp/
+temp/
+.DS_Store
+Thumbs.db

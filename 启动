@@ -1,0 +1,3 @@
+cd E:\2.project\server
+$env:PORT="3001"
+npm start

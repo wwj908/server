@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SSH Server Control Panel</title>
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="app-header">
+        <div>
+          <p>SSH Control</p>
+          <h1>Server Operations Panel</h1>
+        </div>
+        <span class="status-pill" id="status">Not connected</span>
+      </header>
+
+      <section class="login-panel">
+        <label>
+          <span>IP / Host</span>
+          <input id="host" autocomplete="off" />
+        </label>
+        <label>
+          <span>Port</span>
+          <input id="port" value="22" inputmode="numeric" />
+        </label>
+        <label>
+          <span>Username</span>
+          <input id="username" autocomplete="username" />
+        </label>
+        <label>
+          <span>Password</span>
+          <input id="password" type="password" autocomplete="current-password" />
+        </label>
+        <div class="login-actions">
+          <button id="connect">Connect</button>
+          <button id="disconnect" disabled>Disconnect</button>
+          <button id="refresh" disabled>Refresh</button>
+        </div>
+      </section>
+
+      <section class="workspace">
+        <nav class="tabs" aria-label="Views">
+          <button class="tab active" data-tab="overview">Overview</button>
+          <button class="tab" data-tab="processes">Processes</button>
+          <button class="tab" data-tab="files">Files</button>
+          <button class="tab" data-tab="terminal">Terminal</button>
+        </nav>
+
+        <section id="overview" class="tab-page active">
+          <div class="metric-grid">
+            <article><h2>Hostname</h2><pre id="hostname">-</pre></article>
+            <article><h2>Operating System</h2><pre id="os">-</pre></article>
+            <article><h2>Uptime / Load</h2><pre id="uptime">-</pre></article>
+            <article><h2>CPU</h2><pre id="cpu">-</pre></article>
+            <article><h2>Memory</h2><pre id="memory">-</pre></article>
+            <article><h2>Disk</h2><pre id="disk">-</pre></article>
+          </div>
+        </section>
+
+        <section id="processes" class="tab-page">
+          <div class="process-toolbar">
+            <label>
+              <span>Selected</span>
+              <input id="processTarget" placeholder="Select a process or enter a service name" disabled />
+            </label>
+            <button id="processStart" disabled>Start</button>
+            <button id="processStop" disabled>Stop</button>
+            <button id="processRestart" disabled>Restart</button>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>PID</th><th>USER</th><th>CPU %</th><th>MEM %</th><th>COMMAND</th></tr>
+              </thead>
+              <tbody id="processBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="files" class="tab-page">
+          <div class="file-toolbar">
+            <button id="fileUp" disabled>Up</button>
+            <input id="filePath" value="/" disabled />
+            <button id="fileOpen" disabled>Open</button>
+            <button id="fileRefresh" disabled>Refresh</button>
+            <button id="fileUpload" disabled>Upload</button>
+            <input id="fileUploadInput" type="file" hidden />
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Name</th><th>Type</th><th>Size</th><th>Modified</th><th>Permissions</th></tr>
+              </thead>
+              <tbody id="fileBody"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="terminal" class="tab-page terminal-page">
+          <textarea id="terminalArea" spellcheck="false"></textarea>
+          <div class="terminal-actions">
+            <span>Type or paste commands directly in the terminal above.</span>
+            <button id="runLine" disabled>Run Current Line</button>
+          </div>
+        </section>
+      </section>
+    </main>
+
+    <dialog id="editorDialog">
+      <form method="dialog" class="editor-shell">
+        <header>
+          <strong id="editorPath"></strong>
+          <div>
+            <button id="saveFile" type="button">Save</button>
+            <button>Close</button>
+          </div>
+        </header>
+        <textarea id="editorText" spellcheck="false"></textarea>
+      </form>
+    </dialog>
+
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>
