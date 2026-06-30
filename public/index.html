@@ -10,23 +10,23 @@
     <main class="vm-desktop">
       <section class="desktop-icons" aria-label="Desktop apps">
         <button class="desktop-icon" data-window="connectionWindow">
-          <span class="icon-tile">⛓</span>
+          <span class="icon-tile">SSH</span>
           <strong>Connection</strong>
         </button>
         <button class="desktop-icon" data-window="overviewWindow">
-          <span class="icon-tile">◧</span>
+          <span class="icon-tile">SYS</span>
           <strong>System</strong>
         </button>
         <button class="desktop-icon" data-window="filesWindow">
-          <span class="icon-tile">▣</span>
+          <span class="icon-tile">DIR</span>
           <strong>Files</strong>
         </button>
         <button class="desktop-icon" data-window="processesWindow">
-          <span class="icon-tile">☷</span>
+          <span class="icon-tile">PS</span>
           <strong>Processes</strong>
         </button>
         <button class="desktop-icon" data-window="terminalWindow">
-          <span class="icon-tile">⌁</span>
+          <span class="icon-tile">&gt;_</span>
           <strong>Terminal</strong>
         </button>
       </section>
@@ -155,12 +155,17 @@
 
       <footer class="taskbar">
         <button class="start-button" data-window="connectionWindow">SSH</button>
-        <button class="task-button" data-window="connectionWindow">Connection</button>
-        <button class="task-button" data-window="overviewWindow">System</button>
-        <button class="task-button" data-window="filesWindow">Files</button>
-        <button class="task-button" data-window="processesWindow">Processes</button>
-        <button class="task-button" data-window="terminalWindow">Terminal</button>
-        <span class="status-pill" id="status">Not connected</span>
+        <div class="taskbar-apps" aria-label="Taskbar apps">
+          <button class="task-button" data-window="connectionWindow"><span>SSH</span><strong>Connection</strong></button>
+          <button class="task-button" data-window="overviewWindow"><span>SYS</span><strong>System</strong></button>
+          <button class="task-button" data-window="filesWindow"><span>DIR</span><strong>Files</strong></button>
+          <button class="task-button" data-window="processesWindow"><span>PS</span><strong>Processes</strong></button>
+          <button class="task-button" data-window="terminalWindow"><span>&gt;_</span><strong>Terminal</strong></button>
+        </div>
+        <div class="taskbar-tray">
+          <span class="status-pill" id="status">Not connected</span>
+          <time id="taskbarClock">--:--</time>
+        </div>
       </footer>
     </main>
 

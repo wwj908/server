@@ -131,7 +131,8 @@ textarea:focus {
   border-radius: 8px;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.96), rgba(222, 236, 255, 0.92));
   color: var(--accent-strong);
-  font-size: 24px;
+  font-size: 13px;
+  font-weight: 900;
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.22);
 }
 
@@ -465,44 +466,101 @@ tr[data-kind="Folder"] {
 
 .taskbar {
   position: absolute;
-  left: 14px;
-  right: 14px;
-  bottom: 12px;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 50;
-  display: flex;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: 8px;
-  min-height: 52px;
-  border: 1px solid rgba(255, 255, 255, 0.36);
-  border-radius: 8px;
-  padding: 8px;
-  background: rgba(13, 30, 49, 0.68);
-  backdrop-filter: blur(16px);
+  gap: 10px;
+  min-height: 56px;
+  border-top: 1px solid rgba(255, 255, 255, 0.24);
+  padding: 8px 14px;
+  background: rgba(9, 24, 40, 0.82);
+  box-shadow: 0 -14px 42px rgba(4, 16, 31, 0.26);
+  backdrop-filter: blur(18px);
 }
 
 .start-button {
+  min-width: 64px;
   border-color: rgba(255, 255, 255, 0.26);
   background: #eaf2ff;
   color: var(--accent-strong);
   font-weight: 900;
 }
 
+.taskbar-apps {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
 .task-button {
-  border-color: rgba(255, 255, 255, 0.2);
-  background: rgba(255, 255, 255, 0.12);
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 124px;
+  max-width: 170px;
+  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.1);
   color: #f3f8ff;
+  overflow: hidden;
 }
 
 .task-button.active {
-  background: rgba(255, 255, 255, 0.26);
+  border-color: rgba(186, 216, 255, 0.58);
+  background: rgba(255, 255, 255, 0.24);
+}
+
+.task-button.active::after {
+  content: "";
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 3px;
+  height: 3px;
+  border-radius: 999px;
+  background: #7dd3fc;
+}
+
+.task-button span {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 24px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--accent-strong);
+  font-size: 10px;
+  font-weight: 900;
+  flex: 0 0 auto;
+}
+
+.task-button strong {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 13px;
+}
+
+.taskbar-tray {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
 }
 
 .status-pill {
   display: inline-flex;
   align-items: center;
   min-height: 34px;
-  max-width: 380px;
-  margin-left: auto;
+  max-width: 260px;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 999px;
   padding: 7px 13px;
@@ -511,6 +569,21 @@ tr[data-kind="Folder"] {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+#taskbarClock {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 72px;
+  min-height: 34px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 8px;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, 0.12);
+  color: #f3f8ff;
+  font-size: 13px;
+  font-variant-numeric: tabular-nums;
 }
 
 dialog {
@@ -571,7 +644,7 @@ dialog::backdrop {
     min-height: 100vh;
     height: auto;
     overflow: visible;
-    padding: 12px 12px 76px;
+    padding: 12px 12px 88px;
   }
 
   .desktop-icons {
@@ -594,5 +667,22 @@ dialog::backdrop {
   .process-toolbar,
   .file-toolbar {
     grid-template-columns: 1fr;
+  }
+
+  .taskbar {
+    grid-template-columns: auto 1fr;
+  }
+
+  .taskbar-tray {
+    grid-column: 1 / -1;
+    justify-content: space-between;
+  }
+
+  .task-button {
+    min-width: 58px;
+  }
+
+  .task-button strong {
+    display: none;
   }
 }

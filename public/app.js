@@ -422,6 +422,16 @@ function focusWindow(windowId) {
   });
 }
 
+function toggleTaskWindow(windowId) {
+  const win = $(windowId);
+  if (!win) return;
+  if (win.classList.contains("active") && win.classList.contains("focused")) {
+    minimizeWindow(windowId);
+    return;
+  }
+  focusWindow(windowId);
+}
+
 function minimizeWindow(windowId) {
   const win = $(windowId);
   if (!win) return;
@@ -480,7 +490,13 @@ function enableWindowDrag(win) {
 }
 
 document.querySelectorAll("[data-window]").forEach((button) => {
-  button.addEventListener("click", () => focusWindow(button.dataset.window));
+  button.addEventListener("click", () => {
+    if (button.classList.contains("task-button")) {
+      toggleTaskWindow(button.dataset.window);
+      return;
+    }
+    focusWindow(button.dataset.window);
+  });
 });
 
 document.querySelectorAll(".window-minimize").forEach((button) => {
@@ -494,6 +510,15 @@ document.querySelectorAll(".vm-window").forEach((win) => {
   win.addEventListener("pointerdown", () => focusWindow(win.id));
   enableWindowDrag(win);
 });
+
+function updateTaskbarClock() {
+  const clock = $("taskbarClock");
+  if (!clock) return;
+  clock.textContent = new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+}
+
+updateTaskbarClock();
+setInterval(updateTaskbarClock, 30000);
 
 elements.connect.addEventListener("click", async () => {
   setStatus("Connecting...");
