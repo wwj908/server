@@ -37,6 +37,8 @@ const elements = {
   saveFile: $("saveFile")
 };
 
+let topWindowZ = 10;
+
 async function api(path, body) {
   const response = await fetch(path, {
     method: "POST",
@@ -407,12 +409,90 @@ async function runCurrentCommand() {
   }
 }
 
-document.querySelectorAll(".tab").forEach((button) => {
-  button.addEventListener("click", () => {
-    document.querySelectorAll(".tab, .tab-page").forEach((node) => node.classList.remove("active"));
-    button.classList.add("active");
-    $(button.dataset.tab).classList.add("active");
+function focusWindow(windowId) {
+  const win = $(windowId);
+  if (!win) return;
+  win.classList.add("active", "focused");
+  win.style.zIndex = String(++topWindowZ);
+  document.querySelectorAll(".vm-window").forEach((item) => {
+    if (item !== win) item.classList.remove("focused");
   });
+  document.querySelectorAll(`[data-window="${windowId}"].task-button`).forEach((button) => {
+    button.classList.add("active");
+  });
+}
+
+function minimizeWindow(windowId) {
+  const win = $(windowId);
+  if (!win) return;
+  win.classList.remove("active", "focused");
+  document.querySelectorAll(`[data-window="${windowId}"].task-button`).forEach((button) => {
+    button.classList.remove("active");
+  });
+}
+
+function clampWindowPosition(left, top, win) {
+  const margin = 8;
+  const taskbarHeight = 72;
+  const maxLeft = Math.max(margin, window.innerWidth - win.offsetWidth - margin);
+  const maxTop = Math.max(margin, window.innerHeight - win.offsetHeight - taskbarHeight);
+  return {
+    left: Math.min(Math.max(left, margin), maxLeft),
+    top: Math.min(Math.max(top, margin), maxTop)
+  };
+}
+
+function enableWindowDrag(win) {
+  const titlebar = win.querySelector(".window-titlebar");
+  if (!titlebar) return;
+
+  titlebar.addEventListener("pointerdown", (event) => {
+    if (event.target.closest("button")) return;
+    event.preventDefault();
+    focusWindow(win.id);
+
+    const rect = win.getBoundingClientRect();
+    const offsetX = event.clientX - rect.left;
+    const offsetY = event.clientY - rect.top;
+
+    titlebar.setPointerCapture(event.pointerId);
+    win.classList.add("dragging");
+
+    const moveWindow = (moveEvent) => {
+      const next = clampWindowPosition(moveEvent.clientX - offsetX, moveEvent.clientY - offsetY, win);
+      win.style.left = `${next.left}px`;
+      win.style.top = `${next.top}px`;
+      win.style.removeProperty("--x");
+      win.style.removeProperty("--y");
+    };
+
+    const stopDrag = () => {
+      win.classList.remove("dragging");
+      titlebar.removeEventListener("pointermove", moveWindow);
+      titlebar.removeEventListener("pointerup", stopDrag);
+      titlebar.removeEventListener("pointercancel", stopDrag);
+    };
+
+    titlebar.addEventListener("pointermove", moveWindow);
+    titlebar.addEventListener("pointerup", stopDrag);
+    titlebar.addEventListener("pointercancel", stopDrag);
+  });
+}
+
+document.querySelectorAll("[data-window]").forEach((button) => {
+  button.addEventListener("click", () => focusWindow(button.dataset.window));
+});
+
+document.querySelectorAll(".window-minimize").forEach((button) => {
+  button.addEventListener("click", (event) => {
+    event.stopPropagation();
+    minimizeWindow(button.dataset.window);
+  });
+});
+
+document.querySelectorAll(".vm-window").forEach((win) => {
+  win.addEventListener("pointerdown", () => focusWindow(win.id));
+  enableWindowDrag(win);
 });
 
 elements.connect.addEventListener("click", async () => {

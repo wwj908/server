@@ -3,109 +3,165 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>SSH Server Control Panel</title>
+    <title>SSH Virtual Desktop</title>
     <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
-    <main class="app-shell">
-      <header class="app-header">
-        <div>
-          <p>SSH Control</p>
-          <h1>Server Operations Panel</h1>
-        </div>
-        <span class="status-pill" id="status">Not connected</span>
-      </header>
-
-      <section class="login-panel">
-        <label>
-          <span>IP / Host</span>
-          <input id="host" autocomplete="off" />
-        </label>
-        <label>
-          <span>Port</span>
-          <input id="port" value="22" inputmode="numeric" />
-        </label>
-        <label>
-          <span>Username</span>
-          <input id="username" autocomplete="username" />
-        </label>
-        <label>
-          <span>Password</span>
-          <input id="password" type="password" autocomplete="current-password" />
-        </label>
-        <div class="login-actions">
-          <button id="connect">Connect</button>
-          <button id="disconnect" disabled>Disconnect</button>
-          <button id="refresh" disabled>Refresh</button>
-        </div>
+    <main class="vm-desktop">
+      <section class="desktop-icons" aria-label="Desktop apps">
+        <button class="desktop-icon" data-window="connectionWindow">
+          <span class="icon-tile">⛓</span>
+          <strong>Connection</strong>
+        </button>
+        <button class="desktop-icon" data-window="overviewWindow">
+          <span class="icon-tile">◧</span>
+          <strong>System</strong>
+        </button>
+        <button class="desktop-icon" data-window="filesWindow">
+          <span class="icon-tile">▣</span>
+          <strong>Files</strong>
+        </button>
+        <button class="desktop-icon" data-window="processesWindow">
+          <span class="icon-tile">☷</span>
+          <strong>Processes</strong>
+        </button>
+        <button class="desktop-icon" data-window="terminalWindow">
+          <span class="icon-tile">⌁</span>
+          <strong>Terminal</strong>
+        </button>
       </section>
 
-      <section class="workspace">
-        <nav class="tabs" aria-label="Views">
-          <button class="tab active" data-tab="overview">Overview</button>
-          <button class="tab" data-tab="processes">Processes</button>
-          <button class="tab" data-tab="files">Files</button>
-          <button class="tab" data-tab="terminal">Terminal</button>
-        </nav>
-
-        <section id="overview" class="tab-page active">
-          <div class="metric-grid">
-            <article><h2>Hostname</h2><pre id="hostname">-</pre></article>
-            <article><h2>Operating System</h2><pre id="os">-</pre></article>
-            <article><h2>Uptime / Load</h2><pre id="uptime">-</pre></article>
-            <article><h2>CPU</h2><pre id="cpu">-</pre></article>
-            <article><h2>Memory</h2><pre id="memory">-</pre></article>
-            <article><h2>Disk</h2><pre id="disk">-</pre></article>
-          </div>
-        </section>
-
-        <section id="processes" class="tab-page">
-          <div class="process-toolbar">
+      <section class="vm-window connection-window" id="connectionWindow" style="--x: 36px; --y: 28px; --w: 720px; --h: 176px">
+        <header class="window-titlebar">
+          <div><span class="window-dot"></span><strong>SSH Connection</strong></div>
+          <button class="window-minimize" data-window="connectionWindow">_</button>
+        </header>
+        <div class="window-content compact-content">
+          <section class="login-panel">
             <label>
-              <span>Selected</span>
-              <input id="processTarget" placeholder="Select a process or enter a service name" disabled />
+              <span>IP / Host</span>
+              <input id="host" autocomplete="off" />
             </label>
-            <button id="processStart" disabled>Start</button>
-            <button id="processStop" disabled>Stop</button>
-            <button id="processRestart" disabled>Restart</button>
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr><th>PID</th><th>USER</th><th>CPU %</th><th>MEM %</th><th>COMMAND</th></tr>
-              </thead>
-              <tbody id="processBody"></tbody>
-            </table>
-          </div>
-        </section>
-
-        <section id="files" class="tab-page">
-          <div class="file-toolbar">
-            <button id="fileUp" disabled>Up</button>
-            <input id="filePath" value="/" disabled />
-            <button id="fileOpen" disabled>Open</button>
-            <button id="fileRefresh" disabled>Refresh</button>
-            <button id="fileUpload" disabled>Upload</button>
-            <input id="fileUploadInput" type="file" hidden />
-          </div>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr><th>Name</th><th>Type</th><th>Size</th><th>Modified</th><th>Permissions</th></tr>
-              </thead>
-              <tbody id="fileBody"></tbody>
-            </table>
-          </div>
-        </section>
-
-        <section id="terminal" class="tab-page terminal-page">
-          <textarea id="terminalArea" spellcheck="false"></textarea>
-          <div class="terminal-actions">
-            <span>Type or paste commands directly in the terminal above.</span>
-            <button id="runLine" disabled>Run Current Line</button>
-          </div>
-        </section>
+            <label>
+              <span>Port</span>
+              <input id="port" value="22" inputmode="numeric" />
+            </label>
+            <label>
+              <span>Username</span>
+              <input id="username" autocomplete="username" />
+            </label>
+            <label>
+              <span>Password</span>
+              <input id="password" type="password" autocomplete="current-password" />
+            </label>
+            <div class="login-actions">
+              <button id="connect">Connect</button>
+              <button id="disconnect" disabled>Disconnect</button>
+              <button id="refresh" disabled>Refresh</button>
+            </div>
+          </section>
+        </div>
       </section>
+
+      <section class="vm-window" id="overviewWindow" style="--x: 790px; --y: 28px; --w: 460px; --h: 500px">
+        <header class="window-titlebar">
+          <div><span class="window-dot"></span><strong>System Overview</strong></div>
+          <button class="window-minimize" data-window="overviewWindow">_</button>
+        </header>
+        <div class="window-content">
+          <section id="overview" class="tab-page active">
+            <div class="metric-grid">
+              <article><h2>Hostname</h2><pre id="hostname">-</pre></article>
+              <article><h2>Operating System</h2><pre id="os">-</pre></article>
+              <article><h2>Uptime / Load</h2><pre id="uptime">-</pre></article>
+              <article><h2>CPU</h2><pre id="cpu">-</pre></article>
+              <article><h2>Memory</h2><pre id="memory">-</pre></article>
+              <article><h2>Disk</h2><pre id="disk">-</pre></article>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="vm-window" id="filesWindow" style="--x: 36px; --y: 228px; --w: 720px; --h: 520px">
+        <header class="window-titlebar">
+          <div><span class="window-dot"></span><strong>File Manager</strong></div>
+          <button class="window-minimize" data-window="filesWindow">_</button>
+        </header>
+        <div class="window-content">
+          <section id="files" class="tab-page active">
+            <div class="file-toolbar">
+              <button id="fileUp" disabled>Up</button>
+              <input id="filePath" value="/" disabled />
+              <button id="fileOpen" disabled>Open</button>
+              <button id="fileRefresh" disabled>Refresh</button>
+              <button id="fileUpload" disabled>Upload</button>
+              <input id="fileUploadInput" type="file" hidden />
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>Name</th><th>Type</th><th>Size</th><th>Modified</th><th>Permissions</th></tr>
+                </thead>
+                <tbody id="fileBody"></tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="vm-window" id="processesWindow" style="--x: 170px; --y: 150px; --w: 930px; --h: 560px">
+        <header class="window-titlebar">
+          <div><span class="window-dot"></span><strong>Process Monitor</strong></div>
+          <button class="window-minimize" data-window="processesWindow">_</button>
+        </header>
+        <div class="window-content">
+          <section id="processes" class="tab-page active">
+            <div class="process-toolbar">
+              <label>
+                <span>Selected</span>
+                <input id="processTarget" placeholder="Select a process or enter a service name" disabled />
+              </label>
+              <button id="processStart" disabled>Start</button>
+              <button id="processStop" disabled>Stop</button>
+              <button id="processRestart" disabled>Restart</button>
+            </div>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>PID</th><th>USER</th><th>CPU %</th><th>MEM %</th><th>COMMAND</th></tr>
+                </thead>
+                <tbody id="processBody"></tbody>
+              </table>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <section class="vm-window" id="terminalWindow" style="--x: 250px; --y: 96px; --w: 850px; --h: 520px">
+        <header class="window-titlebar">
+          <div><span class="window-dot"></span><strong>Terminal</strong></div>
+          <button class="window-minimize" data-window="terminalWindow">_</button>
+        </header>
+        <div class="window-content terminal-window-content">
+          <section id="terminal" class="tab-page terminal-page active">
+            <textarea id="terminalArea" spellcheck="false"></textarea>
+            <div class="terminal-actions">
+              <span>Type or paste commands directly in the terminal above.</span>
+              <button id="runLine" disabled>Run Current Line</button>
+            </div>
+          </section>
+        </div>
+      </section>
+
+      <footer class="taskbar">
+        <button class="start-button" data-window="connectionWindow">SSH</button>
+        <button class="task-button" data-window="connectionWindow">Connection</button>
+        <button class="task-button" data-window="overviewWindow">System</button>
+        <button class="task-button" data-window="filesWindow">Files</button>
+        <button class="task-button" data-window="processesWindow">Processes</button>
+        <button class="task-button" data-window="terminalWindow">Terminal</button>
+        <span class="status-pill" id="status">Not connected</span>
+      </footer>
     </main>
 
     <dialog id="editorDialog">
