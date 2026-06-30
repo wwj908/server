@@ -75,7 +75,18 @@ function saveConnectionCache() {
 }
 
 function setStatus(text) {
-  elements.status.textContent = text;
+  elements.status.textContent = "";
+  elements.status.title = text;
+  elements.status.setAttribute("aria-label", text);
+  elements.status.dataset.state = getStatusState(text);
+}
+
+function getStatusState(text) {
+  const value = text.toLowerCase();
+  if (value.includes("connected")) return "connected";
+  if (value.includes("connecting") || value.includes("refreshing") || value.includes("uploading")) return "busy";
+  if (value.includes("failed") || value.includes("error") || value.includes("larger")) return "error";
+  return "disconnected";
 }
 
 function setConnected(connected) {
